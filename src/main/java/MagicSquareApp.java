@@ -33,25 +33,28 @@ public class MagicSquareApp extends Application {
     Alert allRight = new Alert(Alert.AlertType.INFORMATION, "正解です！");
     LinkedHashSet<Integer> linkedHashSet = new LinkedHashSet<>();
     List<Integer> list;
+    Label label = new Label("問題選択");
+    Label info = new Label("変更したいボタンで右クリックして、数値を選択してください");
+    ComboBox<String> comboBox = new ComboBox<String>();
+    HBox hBox = new HBox(label, comboBox);
+    BorderPane bp = new BorderPane();
+    GridPane grid = new GridPane();
+    Button[] btns = new Button[9];
+    Button checkButton = new Button("Check");
+    Button resetButton = new Button("Reset");
+    VBox vBox = new VBox(checkButton, resetButton);
+
     @Override
     public void start(Stage primaryStage) throws IOException {
         // プログラムを作成
-        ComboBox<String> comboBox = new ComboBox<String>();
+        checkButton.setMinSize(75, 60);
+        resetButton.setMinSize(75, 60);
         comboBox.getItems().addAll(tasks[0], tasks[1], tasks[2], tasks[3]);
-        Label label = new Label("問題選択");
-        Label info = new Label("変更したいボタンで右クリックして、数値を選択してください");
-        HBox hBox = new HBox(label, comboBox);
         for (int i = 0; i < setnum.length; i++) {
             setnum[i] = new MenuItem();
             setnum[i].setText(String.valueOf(i + 1));
             contextMenu.getItems().addAll(setnum[i]);
         }
-
-        BorderPane bp = new BorderPane();
-        GridPane grid = new GridPane();
-        Button[] btns = new Button[9];
-        grid.setPadding(new Insets(10, 20, 0, 20));
-        grid.setAlignment(Pos.CENTER);
         for (int i = 0; i < btns.length; i++) {
             btns[i] = new Button();
             if (0 <= i && i < 3) {
@@ -67,12 +70,6 @@ public class MagicSquareApp extends Application {
 
 
         }
-        Button checkButton = new Button("Check");
-        checkButton.setMinSize(75, 60);
-        Button resetButton = new Button("Reset");
-        resetButton.setMinSize(75, 60);
-        VBox vBox = new VBox(checkButton, resetButton);
-
         for (int j = 0; j < btns.length; j++) {
             int finalJ = j;
             btns[j].setOnMouseClicked(mouseEvent -> {
@@ -91,72 +88,11 @@ public class MagicSquareApp extends Application {
             @Override
             public void changed(ObservableValue<? extends String> arg0, String old_str, String new_str) {
                 index = comboBox.getSelectionModel().getSelectedIndex();
-                if (list!=null&&(!linkedHashSet.isEmpty())){
+                if (list != null && (!linkedHashSet.isEmpty())) {
                     linkedHashSet.clear();
                     list.clear();
                 }
-                switch (index) {
-                    case 0:
-                        btns[0].setText("8");
-                        btns[1].setText("1");
-                        btns[2].setText("6");
-                        btns[3].setText("3");
-                        btns[4].setText("5");
-                        btns[5].setText("");
-                        btns[5].setContextMenu(contextMenu);
-                        btns[6].setText("4");
-                        btns[7].setText("9");
-                        btns[8].setText("2");
-                        break;
-                    case 1:
-                        btns[0].setText("");
-                        btns[0].setContextMenu(contextMenu);
-                        btns[1].setText("7");
-                        btns[2].setText("2");
-                        btns[3].setText("1");
-                        btns[4].setText("5");
-                        btns[5].setText("");
-                        btns[5].setContextMenu(contextMenu);
-                        btns[6].setText("8");
-                        btns[7].setText("");
-                        btns[7].setContextMenu(contextMenu);
-                        btns[8].setText("4");
-                        break;
-                    case 2:
-                        btns[0].setText("");
-                        btns[0].setContextMenu(contextMenu);
-                        btns[1].setText("3");
-                        btns[2].setText("");
-                        btns[2].setContextMenu(contextMenu);
-                        btns[3].setText("9");
-                        btns[4].setText("");
-                        btns[4].setContextMenu(contextMenu);
-                        btns[5].setText("1");
-                        btns[6].setText("");
-                        btns[6].setContextMenu(contextMenu);
-                        btns[7].setText("7");
-                        btns[8].setText("");
-                        btns[8].setContextMenu(contextMenu);
-                        break;
-                    case 3:
-                        btns[0].setText("2");
-                        btns[1].setText("");
-                        btns[1].setContextMenu(contextMenu);
-                        btns[2].setText("");
-                        btns[2].setContextMenu(contextMenu);
-                        btns[3].setText("");
-                        btns[3].setContextMenu(contextMenu);
-                        btns[4].setText("");
-                        btns[4].setContextMenu(contextMenu);
-                        btns[5].setText("");
-                        btns[5].setContextMenu(contextMenu);
-                        btns[6].setText("");
-                        btns[6].setContextMenu(contextMenu);
-                        btns[7].setText("1");
-                        btns[8].setText("");
-                        btns[8].setContextMenu(contextMenu);
-                        break;
-                }
+                addRightMenu(index);
             }
         });
 
@@ -167,13 +103,13 @@ public class MagicSquareApp extends Application {
                 }
             }
             list = new LinkedList<>(linkedHashSet);
-            int sum=0;
+            int sum = 0;
             for (int i = 0; i < list.size(); i++) {
-                sum=list.get(i)+sum;
+                sum = list.get(i) + sum;
             }
-            if (linkedHashSet.size() ==9&&sum==45) {
+            if (linkedHashSet.size() == 9 && sum == 45) {
                 allRight.showAndWait();
-                sum=0;
+                sum = 0;
                 list.clear();
                 linkedHashSet.clear();
             } else {
@@ -182,16 +118,18 @@ public class MagicSquareApp extends Application {
 
         });
         resetButton.setOnAction(e -> {
-            for (int i = 0; i < btns.length; i++) {
-                btns[i].setText("");
+            addRightMenu(index);
+            if (list != null && (!linkedHashSet.isEmpty())) {
+                linkedHashSet.clear();
+                list.clear();
             }
-            linkedHashSet.clear();
-            list.clear();
         });
         bp.setTop(hBox);
         hBox.setPadding(new Insets(10, 20, 0, 20));
         hBox.setAlignment(Pos.CENTER);
         bp.setLeft(grid);
+        grid.setPadding(new Insets(10, 20, 0, 20));
+        grid.setAlignment(Pos.CENTER);
         bp.setRight(vBox);
         vBox.setPadding(new Insets(10, 20, 0, 20));
         bp.setBottom(info);
@@ -200,12 +138,75 @@ public class MagicSquareApp extends Application {
 
         primaryStage.setScene(new Scene(bp, 400, 250));
         primaryStage.setTitle("MagicSquareApp");
-
         grid.setAlignment(Pos.TOP_CENTER);
+        comboBox.getSelectionModel().select(0);
         primaryStage.show();
     }
 
-
+    public void addRightMenu(int index) {
+        switch (index) {
+            case 0:
+                btns[0].setText("8");
+                btns[1].setText("1");
+                btns[2].setText("6");
+                btns[3].setText("3");
+                btns[4].setText("5");
+                btns[5].setText("");
+                btns[5].setContextMenu(contextMenu);
+                btns[6].setText("4");
+                btns[7].setText("9");
+                btns[8].setText("2");
+                break;
+            case 1:
+                btns[0].setText("");
+                btns[0].setContextMenu(contextMenu);
+                btns[1].setText("7");
+                btns[2].setText("2");
+                btns[3].setText("1");
+                btns[4].setText("5");
+                btns[5].setText("");
+                btns[5].setContextMenu(contextMenu);
+                btns[6].setText("8");
+                btns[7].setText("");
+                btns[7].setContextMenu(contextMenu);
+                btns[8].setText("4");
+                break;
+            case 2:
+                btns[0].setText("");
+                btns[0].setContextMenu(contextMenu);
+                btns[1].setText("3");
+                btns[2].setText("");
+                btns[2].setContextMenu(contextMenu);
+                btns[3].setText("9");
+                btns[4].setText("");
+                btns[4].setContextMenu(contextMenu);
+                btns[5].setText("1");
+                btns[6].setText("");
+                btns[6].setContextMenu(contextMenu);
+                btns[7].setText("7");
+                btns[8].setText("");
+                btns[8].setContextMenu(contextMenu);
+                break;
+            case 3:
+                btns[0].setText("2");
+                btns[1].setText("");
+                btns[1].setContextMenu(contextMenu);
+                btns[2].setText("");
+                btns[2].setContextMenu(contextMenu);
+                btns[3].setText("");
+                btns[3].setContextMenu(contextMenu);
+                btns[4].setText("");
+                btns[4].setContextMenu(contextMenu);
+                btns[5].setText("");
+                btns[5].setContextMenu(contextMenu);
+                btns[6].setText("");
+                btns[6].setContextMenu(contextMenu);
+                btns[7].setText("1");
+                btns[8].setText("");
+                btns[8].setContextMenu(contextMenu);
+                break;
+        }
+    }
 
     public static void main(String[] args) {
         // アプリケーションを起動する
@@ -215,7 +216,10 @@ public class MagicSquareApp extends Application {
 }
 
 /* 考察 -- 調査したこと、考慮したこと、工夫したことを記述
-
+今回の課題でLinkedHashMapクラスをつかいました。キーとバリューのペアで要素を保持することが出来、キーの重複を許可しないので、
+ユーザーの入力した元素の数がコントロールことが出来ます。和の値は４５という条件だけで、正しいかどうかを判断出来ます。
+そして、LinkedHashMapの元素の取り出しが困難になるので、プログラムのチェックメソッドではLickedListに変換されている。
+入力する方法は、右クリックの形で実現しました。ユーザーは危ないSystem.inストリーム使うことから避けています。
 
 
 
