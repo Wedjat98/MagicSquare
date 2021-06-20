@@ -1,23 +1,21 @@
+
 // レポート第2回: Magic Square Application
 
 import javafx.application.Application;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.Cursor;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseButton;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
 
 import java.io.IOException;
-import java.io.PrintStream;
-import java.util.*;
+import java.util.LinkedHashSet;
+import java.util.LinkedList;
+import java.util.List;
 
 public class MagicSquareApp extends Application {
 
@@ -52,6 +50,8 @@ public class MagicSquareApp extends Application {
         BorderPane bp = new BorderPane();
         GridPane grid = new GridPane();
         Button[] btns = new Button[9];
+        grid.setPadding(new Insets(10, 20, 0, 20));
+        grid.setAlignment(Pos.CENTER);
         for (int i = 0; i < btns.length; i++) {
             btns[i] = new Button();
             if (0 <= i && i < 3) {
@@ -64,6 +64,7 @@ public class MagicSquareApp extends Application {
             btns[i].setAlignment(Pos.TOP_CENTER);
             btns[i].setPadding(new Insets(12));
             btns[i].setMinSize(50, 50);
+
 
         }
         Button checkButton = new Button("Check");
@@ -188,9 +189,14 @@ public class MagicSquareApp extends Application {
             list.clear();
         });
         bp.setTop(hBox);
+        hBox.setPadding(new Insets(10, 20, 0, 20));
+        hBox.setAlignment(Pos.CENTER);
         bp.setLeft(grid);
         bp.setRight(vBox);
+        vBox.setPadding(new Insets(10, 20, 0, 20));
         bp.setBottom(info);
+        info.setPadding(new Insets(10, 20, 0, 20));
+        info.setAlignment(Pos.CENTER);
 
         primaryStage.setScene(new Scene(bp, 400, 250));
         primaryStage.setTitle("MagicSquareApp");
