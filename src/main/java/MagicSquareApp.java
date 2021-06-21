@@ -48,7 +48,9 @@ public class MagicSquareApp extends Application {
     public void start(Stage primaryStage) throws IOException {
         // プログラムを作成
         checkButton.setMinSize(75, 60);
+        checkButton.setAlignment(Pos.CENTER);
         resetButton.setMinSize(75, 60);
+        resetButton.setAlignment(Pos.CENTER);
         comboBox.getItems().addAll(tasks[0], tasks[1], tasks[2], tasks[3]);
         for (int i = 0; i < setnum.length; i++) {
             setnum[i] = new MenuItem();
