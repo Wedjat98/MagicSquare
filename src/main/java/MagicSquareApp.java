@@ -10,6 +10,8 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseButton;
 import javafx.scene.layout.*;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -35,6 +37,9 @@ public class MagicSquareApp extends Application {
     List<Integer> list;
     Label label = new Label("問題選択");
     Label info = new Label("変更したいボタンで右クリックして、数値を選択してください");
+
+
+
     ComboBox<String> comboBox = new ComboBox<String>();
     HBox hBox = new HBox(label, comboBox);
     BorderPane bp = new BorderPane();
@@ -47,6 +52,7 @@ public class MagicSquareApp extends Application {
     @Override
     public void start(Stage primaryStage) throws IOException {
         // プログラムを作成
+        info.setFont(Font.font(null, FontWeight.BOLD, 12));
         checkButton.setMinSize(75, 60);
         checkButton.setAlignment(Pos.CENTER);
         resetButton.setMinSize(75, 60);
@@ -137,7 +143,7 @@ public class MagicSquareApp extends Application {
         bp.setRight(vBox);
         vBox.setPadding(new Insets(10, 20, 0, 20));
         bp.setBottom(info);
-        info.setPadding(new Insets(10, 20, 0, 20));
+        info.setPadding(new Insets(10, 25, 0, 30));
         info.setAlignment(Pos.CENTER);
 
         primaryStage.setScene(new Scene(bp, 400, 250));
