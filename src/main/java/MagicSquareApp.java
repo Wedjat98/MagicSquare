@@ -92,6 +92,7 @@ public class MagicSquareApp extends Application {
                     linkedHashSet.clear();
                     list.clear();
                 }
+                clearContextMenu();
                 addRightMenu(index);
             }
         });
@@ -118,6 +119,7 @@ public class MagicSquareApp extends Application {
 
         });
         resetButton.setOnAction(e -> {
+            clearContextMenu();
             addRightMenu(index);
             if (list != null && (!linkedHashSet.isEmpty())) {
                 linkedHashSet.clear();
@@ -207,7 +209,12 @@ public class MagicSquareApp extends Application {
                 break;
         }
     }
-
+    public void clearContextMenu(){
+        for (int i = 0; i < btns.length; i++) {
+            ContextMenu nullContextMenu = null;
+            btns[i].setContextMenu(nullContextMenu);
+        }
+    }
     public static void main(String[] args) {
         // アプリケーションを起動する
         Application.launch(args);
